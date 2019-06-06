@@ -36,11 +36,11 @@ The goals / steps of this project are the following:
 
 #### 1. Briefly state how you computed the camera matrix and distortion coefficients. Provide an example of a distortion corrected calibration image.
 
-The code for this step is contained in the first code cell of the IPython notebook located in "/code.ipynb" . 
+The code for this step is contained in the first code cell of the IPython notebook located in "/code.ipynb" .
 
 I start by preparing "object points", which will be the (x, y, z) coordinates of the chessboard corners in the world. Here I am assuming the chessboard is fixed on the (x, y) plane at z=0, such that the object points are the same for each calibration image.  Thus, `objp` is just a replicated array of coordinates, and `objpoints` will be appended with a copy of it every time I successfully detect all chessboard corners in a test image.  `imgpoints` will be appended with the (x, y) pixel position of each of the corners in the image plane with each successful chessboard detection.  
 
-I then used the output `objpoints` and `imgpoints` to compute the camera calibration and distortion coefficients using the `cv2.calibrateCamera()` function.  I applied this distortion correction to the test image using the `cv2.undistort()` function and obtained this result: 
+I then used the output `objpoints` and `imgpoints` to compute the camera calibration and distortion coefficients using the `cv2.calibrateCamera()` function.  I applied this distortion correction to the test image using the `cv2.undistort()` function and obtained this result:
 
 ![alt text][image1]
 
@@ -55,31 +55,31 @@ I got the distortion_corrected image by using the `cv2.undistort(image,mtx,dist,
 I create a threshold binary image by using the following method.
 
 * both the x and y gradients meet the threshold criteria.
- 1.Gray the image using`cv2.cvtColor()`, 
- 2.Calculate the absolute of gradient in x and y direction`np.absolute(cv2.Sobel())` 
- 3.Establish an zero image which has the same shape of gray`np.zeros_like()`. 
+ 1.Gray the image using`cv2.cvtColor()`,
+ 2.Calculate the absolute of gradient in x and y direction`np.absolute(cv2.Sobel())`
+ 3.Establish an zero image which has the same shape of gray`np.zeros_like()`.
  4.Put the pixels meet the threshold criterion in zero image to one
-  
+
 * gradient magnitude and direction are both within their threshold values.
 1.Calculate the gradient magnitude using the square root of the gradient in x square and y square`np.sqrt()`
-2.Establish an zero image which has the same shape of gray`np.zeros_like()`. 
+2.Establish an zero image which has the same shape of gray`np.zeros_like()`.
 3.Put the pixels meet the threshold criterion in zero image to one
 4.Calculate the direction of gradient`np.arctan2()`
-5.Establish an zero image which has the same shape of gray`np.zeros_like()`. 
+5.Establish an zero image which has the same shape of gray`np.zeros_like()`.
 6.Put the pixels meet the threshold criterion in zero image to one
 
-* Extract the yellow lane line  using S channal of HLS color space 
+* Extract the yellow lane line  using S channal of HLS color space
 1.Convert image to HLS color space`cv2.cvtColor()`
-2.Establish an zero image which has the same shape of S channel`np.zeros_like()`. 
+2.Establish an zero image which has the same shape of S channel`np.zeros_like()`.
 3.Put the pixels meet the threshold criterion in S channel to one
 
-*Extract the white lane line  using L channal of LUV color space 
+*Extract the white lane line  using L channal of LUV color space
 1.Convert image to HLS color space`cv2.cvtColor()`
-2.Establish an zero image which has the same shape of S channel`np.zeros_like()`. 
+2.Establish an zero image which has the same shape of S channel`np.zeros_like()`.
 3.Put the pixels meet the threshold criterion in S channel to one
-  
+
 * Combined several selections to one part.
-1.Establish an zero image which has the same shape of gray`np.zeros_like()`. 
+1.Establish an zero image which has the same shape of gray`np.zeros_like()`.
 2.`combined[(hls_s_binary==1) | (luv_l_binary==1)|((gradx==1) & (mag_binary==1) &(grady==1) & (dir_binary==1))]=1`  
 
 ![alt text][image3]
@@ -103,9 +103,9 @@ dst = np.float32(
 
 This resulted in the following source and destination points:
 
-| Source        | Destination   | 
-|:-------------:|:-------------:| 
-| 585, 460      | 320, 0        | 
+| Source        | Destination   |
+|:-------------:|:-------------:|
+| 585, 460      | 320, 0        |
 | 203, 720      | 320, 720      |
 | 1127, 720     | 960, 720      |
 | 695, 460      | 960, 0        |
@@ -149,7 +149,7 @@ I implemented this step in lines # through # in my code in `code.ipynb` in the f
 
 #### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
 
-Here's a [link to my video result](/project_video.mp4)
+Here's a [link to my video result](https://v.youku.com/v_show/id_XNDEyNjEyNTczMg==.html?firsttime=1)
 
 ---
 
@@ -161,12 +161,12 @@ Here I'll talk about the approach I took, what techniques I used, what worked an
 **Problems:**
 It sames to work well when I implement it in a single image,but when I put it on the video. It appeared many issues. such as :
 
-1. The text and the lane line area is no dynamic,even the video is just a picture because of using the wrong object. 
+1. The text and the lane line area is no dynamic,even the video is just a picture because of using the wrong object.
 2. When combine the whole process, it appears some variables error.etc.
 
 **Where will your pipeline likely fail?**
 
-1.When the shadow or sunshine appears alternately,the fitting lane line is easily to shake. 
+1.When the shadow or sunshine appears alternately,the fitting lane line is easily to shake.
 
 2.When the lane line is not clear and there is a turn, it worked not good.
 
